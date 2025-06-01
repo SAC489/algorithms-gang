@@ -14,19 +14,20 @@
 
     <script>
         fetch('posts.json')
-            .then(response => response.json())
-            .then(posts => {
-                const container = document.getElementById('posts');
-                posts.forEach(post => {
-                    const postDiv = document.createElement('div');
-                    postDiv.className = 'post';
-                    postDiv.innerHTML = `
-                        <div class="date">${new Date(post.date*1000).toLocaleString()}</div>
-                        <div class="content">${post.text}</div>
-                    `;
-                    container.appendChild(postDiv);
-                });
+          .then(response => response.json())
+          .then(posts => {
+            const container = document.getElementById('posts');
+            // Display all posts (newest first)
+            posts.reverse().forEach(post => {
+              const postDiv = document.createElement('div');
+              postDiv.className = 'post';
+              postDiv.innerHTML = `
+                <div class="date">${new Date(post.date*1000).toLocaleString()}</div>
+                <div class="content">${post.text}</div>
+              `;
+              container.appendChild(postDiv);
             });
+          });   
     </script>
 </body>
 </html>
