@@ -113,3 +113,42 @@ h1 {
         padding: 1rem;
     }
 }
+ .posts-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.post {
+  background: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.post time {
+  color: #666;
+  font-size: 0.9em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.post-content {
+  white-space: pre-line; /* Preserves line breaks */
+}
+
+.no-posts, .error {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+button {
+  background: #4361ee;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
