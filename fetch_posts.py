@@ -1,8 +1,8 @@
 import requests
 import json
 
-TELEGRAM_BOT_TOKEN = 'your_bot_token'
-CHANNEL_ID = '@your_channel_name'
+TELEGRAM_BOT_TOKEN = '8009608932:AAGfQj9SL29HZx8aRCFL6of2-wnCXgOBO3c'
+CHANNEL_ID = '@algorithmsgang'
 OUTPUT_FILE = 'posts.json'
 
 def get_channel_messages():
