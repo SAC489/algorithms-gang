@@ -29,7 +29,15 @@ jobs:
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
-        run: python fetch_posts.py
+        run: |
+          python fetch_posts.py
+          # Store the last processed ID
+          if [ -f last_id.txt ]; then
+            echo "Resuming from last ID"
+          else
+            echo "0" > last_id.txt
+            echo "Starting full history fetch"
+          fi
 
       - name: Commit and push changes
         env:
