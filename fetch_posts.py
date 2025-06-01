@@ -1,27 +1,39 @@
+import os
 import requests
-import json
+from dotenv import load_dotenv
 
-TELEGRAM_BOT_TOKEN = '8009608932:AAGfQj9SL29HZx8aRCFL6of2-wnCXgOBO3c'
-CHANNEL_ID = '@algorithmsgang'
-OUTPUT_FILE = 'posts.json'
+load_dotenv()
 
-def get_channel_messages():
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+CHANNEL_ID = os.getenv('CHANNEL_ID')
+
+def get_all_messages():
     url = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/getUpdates"
-    response = requests.get(url)
-    messages = response.json().get('result', [])
+    all_messages = []
+    offset = 0
     
-    posts = []
-    for msg in messages:
-        if 'channel_post' in msg:
-            post = {
-                'date': msg['channel_post']['date'],
-                'text': msg['channel_post'].get('text', ''),
-                'photos': [p['file_id'] for p in msg['channel_post'].get('photo', [])]
-            }
-            posts.append(post)
+    while True:
+        params = {'offset': offset, 'limit': 100}
+        response = requests.get(url, params=params).json()
+        
+        if not response.get('result'):
+            break
+            
+        for update in response['result']:
+            if 'channel_post' in update and str(update['channel_post']['chat']['id']) == CHANNEL_ID.replace('-100', ''):
+                all_messages.append({
+                    'id': update['update_id'],
+                    'date': update['channel_post']['date'],
+                    'text': update['channel_post'].get('text', ''),
+                    'photos': [p['file_id'] for p in update['channel_post'].get('photo', [])]
+                })
+                offset = update['update_id'] + 1
     
-    with open(OUTPUT_FILE, 'w') as f:
-        json.dump(posts[-10:], f)  # Save last 10 posts
+    # Sort by date (oldest first)
+    all_messages.sort(key=lambda x: x['date'])
+    return all_messages
 
 if __name__ == "__main__":
-    get_channel_messages()
+    messages = get_all_messages()
+    with open('posts.json', 'w') as f:
+        json.dump(messages, f, indent=2)
