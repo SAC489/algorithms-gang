@@ -28,9 +28,12 @@ def get_all_messages():
             for update in response['result']:
                 if 'channel_post' in update:
                     chat_id = str(update['channel_post']['chat']['id'])
-                    # Handle both numeric IDs and usernames
-                    if (CHANNEL_ID.startswith('@') and (update['channel_post']['chat']['username'] == CHANNEL_ID[1:]) or \
-                       (CHANNEL_ID.startswith('-100') and (chat_id == CHANNEL_ID.replace('-100', ''))):
+                    # Fixed condition with proper parentheses:
+                    if ((CHANNEL_ID.startswith('@') and 
+                         'username' in update['channel_post']['chat'] and
+                         update['channel_post']['chat']['username'] == CHANNEL_ID[1:]) or
+                        (CHANNEL_ID.startswith('-100') and 
+                         chat_id == CHANNEL_ID.replace('-100', ''))):
                         all_messages.append({
                             'date': update['channel_post']['date'],
                             'text': update['channel_post'].get('text', ''),
